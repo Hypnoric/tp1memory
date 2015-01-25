@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 Joueur"
+        android:id="@+id/onePlayerBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/twoPlayerBtn"
+        android:layout_alignStart="@+id/twoPlayerBtn"
+        android:layout_marginTop="39dp"
+        android:onClick="onePlayerBtnOnClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2 Joueurs"
+        android:id="@+id/twoPlayerBtn"
+        android:layout_below="@+id/onePlayerBtn"
+        android:layout_alignLeft="@+id/highScoresBtn"
+        android:layout_alignStart="@+id/highScoresBtn"
+        android:layout_marginTop="137dp"
+        android:onClick="twoPlayerBtnOnClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Classement"
+        android:id="@+id/highScoresBtn"
+        android:layout_below="@+id/twoPlayerBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="58dp"
+        android:onClick="highScoresBtnOnClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quitter"
+        android:id="@+id/quitBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp"
+        android:onClick="quitBtnOnClick" />
+</RelativeLayout>

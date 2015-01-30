@@ -39,7 +39,6 @@ public class Jeu extends ActionBarActivity {
 
         Bundle extras = getIntent().getExtras();
         boolean isOnePlayer;
-        extras = getIntent().getExtras();
         if(extras == null) {
             isOnePlayer= false;
         } else {

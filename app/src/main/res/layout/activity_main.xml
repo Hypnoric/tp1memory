@@ -10,40 +10,41 @@
         android:layout_height="wrap_content"
         android:text="1 Joueur"
         android:id="@+id/onePlayerBtn"
+        android:layout_marginTop="92dp"
+        android:onClick="onePlayerBtnOnClick"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/twoPlayerBtn"
-        android:layout_alignStart="@+id/twoPlayerBtn"
-        android:layout_marginTop="39dp"
-        android:onClick="onePlayerBtnOnClick" />
+        android:layout_alignStart="@+id/twoPlayerBtn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2 Joueurs"
         android:id="@+id/twoPlayerBtn"
+        android:layout_marginTop="52dp"
+        android:onClick="twoPlayerBtnOnClick"
         android:layout_below="@+id/onePlayerBtn"
         android:layout_alignLeft="@+id/highScoresBtn"
-        android:layout_alignStart="@+id/highScoresBtn"
-        android:layout_marginTop="137dp"
-        android:onClick="twoPlayerBtnOnClick" />
+        android:layout_alignStart="@+id/highScoresBtn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Classement"
         android:id="@+id/highScoresBtn"
+        android:layout_marginTop="53dp"
+        android:onClick="highScoresBtnOnClick"
         android:layout_below="@+id/twoPlayerBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="58dp"
-        android:onClick="highScoresBtnOnClick" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Quitter"
         android:id="@+id/quitBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="46dp"
-        android:onClick="quitBtnOnClick" />
+        android:onClick="quitBtnOnClick"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/highScoresBtn"
+        android:layout_alignLeft="@+id/highScoresBtn"
+        android:layout_alignStart="@+id/highScoresBtn" />
 </RelativeLayout>

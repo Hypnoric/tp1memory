@@ -1,5 +1,6 @@
 package com.yanick.nicolas.eric.memory;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,7 +20,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void twoPlayerBtnOnClick(View v){
-
+        Intent intent = new Intent(this, Jeu.class);
+        intent.putExtra("isOnePlayer", false);
+        startActivity(intent);
     }
 
     public void highScoresBtnOnClick(View v){

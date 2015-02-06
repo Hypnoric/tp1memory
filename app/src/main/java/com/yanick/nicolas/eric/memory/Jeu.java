@@ -1,18 +1,27 @@
 package com.yanick.nicolas.eric.memory;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class Jeu extends ActionBarActivity {
 
     boolean isOnePlayer;
+    boolean partieTerminee;
+    boolean tourJoueur1;
+    Integer carteTournee;
+    View derniereCarte;
+    int ptsP1;
+    int ptsP2;
 
     Random rand = new Random();
     Integer[] ImagesIds = {
@@ -55,8 +64,67 @@ public class Jeu extends ActionBarActivity {
             placerCarte(i);
         }
 
-        initialiserBoutons();
+        carteTournee = 255;
+        ptsP1 = 0;
+        ptsP2 = 0;
+        tourJoueur1 = true;
+        partieTerminee = false;
+        derniereCarte = null;
 
+        initialiserBoutons();
+    }
+
+    private void gererPartie(Integer carte, View v){
+        if(carteTournee != 255 && derniereCarte != v)
+        {
+            if(carte == carteTournee)
+            {
+                if(tourJoueur1) {
+                    ++ptsP1;
+                    final TextView txtScore1 = (TextView) findViewById(R.id.scoreP1);
+                    txtScore1.setText(String.valueOf(ptsP1));
+                }
+                else {
+                    ++ptsP2;
+                    final TextView txtScore2 = (TextView) findViewById(R.id.scoreP2);
+                    txtScore2.setText(String.valueOf(ptsP2));
+                }
+
+                retirerCartes(v);
+            }
+            else
+            {
+                tourJoueur1 = !tourJoueur1;
+
+                //TODO:changer image pour savoir le joueur actif
+                final ImageView imageP1 = (ImageView) findViewById(R.id.imageP1);
+                final ImageView imageP2 = (ImageView) findViewById(R.id.imageP2);
+
+                retournerCartes(v);
+            }
+        }
+        else
+            carteTournee = carte;
+    }
+
+    private void retirerCartes(View v){
+        derniereCarte.setEnabled(false);
+        v.setEnabled(false);
+        derniereCarte.setVisibility(View.INVISIBLE);
+        v.setVisibility(View.INVISIBLE);
+        carteTournee = 255;
+    }
+
+    private void retournerCartes(View v){
+        derniereCarte.setBackgroundResource(R.drawable.facedown);
+        v.setBackgroundResource(R.drawable.facedown);
+        carteTournee = 255;
+    }
+
+    private void click(View v, int x, int y){
+        v.setBackground(getResources().getDrawable(cards[x][y]));
+        gererPartie(cards[x][y], v);
+        derniereCarte = v;
     }
 
     private void initialiserBoutons(){
@@ -64,7 +132,7 @@ public class Jeu extends ActionBarActivity {
         carte1.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][0]));
+                click(v, 0, 0);
             }
         });
 
@@ -72,7 +140,7 @@ public class Jeu extends ActionBarActivity {
         carte2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][1]));
+                click(v, 0, 1);
             }
         });
 
@@ -80,7 +148,7 @@ public class Jeu extends ActionBarActivity {
         carte3.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][2]));
+                click(v, 0, 2);
             }
         });
 
@@ -88,7 +156,7 @@ public class Jeu extends ActionBarActivity {
         carte4.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][3]));
+                click(v, 0, 3);
             }
         });
 
@@ -96,7 +164,7 @@ public class Jeu extends ActionBarActivity {
         carte5.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][4]));
+                click(v, 0, 4);
             }
         });
 
@@ -104,7 +172,7 @@ public class Jeu extends ActionBarActivity {
         carte6.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[0][5]));
+                click(v, 0, 5);
             }
         });
 
@@ -112,7 +180,7 @@ public class Jeu extends ActionBarActivity {
         carte7.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][0]));
+                click(v, 1, 0);
             }
         });
 
@@ -120,7 +188,7 @@ public class Jeu extends ActionBarActivity {
         carte8.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][1]));
+                click(v, 1, 1);
             }
         });
 
@@ -128,7 +196,7 @@ public class Jeu extends ActionBarActivity {
         carte9.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][2]));
+                click(v, 1, 2);
             }
         });
 
@@ -136,7 +204,7 @@ public class Jeu extends ActionBarActivity {
         carte10.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][3]));
+                click(v, 1, 3);
             }
         });
 
@@ -144,7 +212,7 @@ public class Jeu extends ActionBarActivity {
         carte11.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][4]));
+                click(v, 1, 4);
             }
         });
 
@@ -152,7 +220,7 @@ public class Jeu extends ActionBarActivity {
         carte12.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[1][5]));
+                click(v, 1, 5);
             }
         });
 
@@ -160,7 +228,7 @@ public class Jeu extends ActionBarActivity {
         carte13.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][0]));
+                click(v, 2, 0);
             }
         });
 
@@ -168,7 +236,7 @@ public class Jeu extends ActionBarActivity {
         carte14.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][1]));
+                click(v, 2, 1);
             }
         });
 
@@ -176,7 +244,7 @@ public class Jeu extends ActionBarActivity {
         carte15.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][2]));
+                click(v, 2, 2);
             }
         });
 
@@ -184,7 +252,7 @@ public class Jeu extends ActionBarActivity {
         carte16.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][3]));
+                click(v, 2, 3);
             }
         });
 
@@ -192,7 +260,7 @@ public class Jeu extends ActionBarActivity {
         carte17.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][4]));
+                click(v, 2, 4);
             }
         });
 
@@ -200,7 +268,7 @@ public class Jeu extends ActionBarActivity {
         carte18.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[2][5]));
+                click(v, 2, 5);
             }
         });
 
@@ -208,7 +276,7 @@ public class Jeu extends ActionBarActivity {
         carte19.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][0]));
+                click(v, 3, 0);
             }
         });
 
@@ -216,7 +284,7 @@ public class Jeu extends ActionBarActivity {
         carte20.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][1]));
+                click(v, 3, 1);
             }
         });
 
@@ -224,7 +292,7 @@ public class Jeu extends ActionBarActivity {
         carte21.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][2]));
+                click(v, 3, 2);
             }
         });
 
@@ -232,7 +300,7 @@ public class Jeu extends ActionBarActivity {
         carte22.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][3]));
+                click(v, 3, 3);
             }
         });
 
@@ -240,7 +308,7 @@ public class Jeu extends ActionBarActivity {
         carte23.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][4]));
+                click(v, 3, 4);
             }
         });
 
@@ -248,7 +316,7 @@ public class Jeu extends ActionBarActivity {
         carte24.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackground(getResources().getDrawable(cards[3][5]));
+                click(v, 3, 5);
             }
         });
     }

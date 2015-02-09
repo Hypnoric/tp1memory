@@ -18,8 +18,11 @@ public class Jeu extends ActionBarActivity {
     boolean isOnePlayer;
     boolean partieTerminee;
     boolean tourJoueur1;
+    boolean combinaisonTrouvee;
+    boolean cartesDifferentes;
     Integer carteTournee;
     View derniereCarte;
+    View tempCarte;
     int ptsP1;
     int ptsP2;
 
@@ -70,6 +73,8 @@ public class Jeu extends ActionBarActivity {
         tourJoueur1 = true;
         partieTerminee = false;
         derniereCarte = null;
+        cartesDifferentes = false;
+        combinaisonTrouvee = false;
 
         initialiserBoutons();
     }
@@ -90,7 +95,7 @@ public class Jeu extends ActionBarActivity {
                     txtScore2.setText(String.valueOf(ptsP2));
                 }
 
-                retirerCartes(v);
+                combinaisonTrouvee = true;
             }
             else
             {
@@ -100,28 +105,37 @@ public class Jeu extends ActionBarActivity {
                 final ImageView imageP1 = (ImageView) findViewById(R.id.imageP1);
                 final ImageView imageP2 = (ImageView) findViewById(R.id.imageP2);
 
-                retournerCartes(v);
+                cartesDifferentes = true;
             }
+            tempCarte = derniereCarte;
         }
         else
             carteTournee = carte;
     }
 
-    private void retirerCartes(View v){
+    private void retirerCartes(){
         derniereCarte.setEnabled(false);
-        v.setEnabled(false);
+        tempCarte.setEnabled(false);
         derniereCarte.setVisibility(View.INVISIBLE);
-        v.setVisibility(View.INVISIBLE);
+        tempCarte.setVisibility(View.INVISIBLE);
         carteTournee = 255;
     }
 
-    private void retournerCartes(View v){
+    private void retournerCartes(){
         derniereCarte.setBackgroundResource(R.drawable.facedown);
-        v.setBackgroundResource(R.drawable.facedown);
+        tempCarte.setBackgroundResource(R.drawable.facedown);
         carteTournee = 255;
     }
 
     private void click(View v, int x, int y){
+        if(combinaisonTrouvee){
+            combinaisonTrouvee = false;
+            retirerCartes();
+        }
+        else if(cartesDifferentes){
+            cartesDifferentes = false;
+            retournerCartes();
+        }
         v.setBackground(getResources().getDrawable(cards[x][y]));
         gererPartie(cards[x][y], v);
         derniereCarte = v;

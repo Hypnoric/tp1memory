@@ -3,48 +3,75 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="@drawable/background">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1 Joueur"
-        android:id="@+id/onePlayerBtn"
-        android:layout_marginTop="92dp"
-        android:onClick="onePlayerBtnOnClick"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/twoPlayerBtn"
-        android:layout_alignStart="@+id/twoPlayerBtn" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2 Joueurs"
-        android:id="@+id/twoPlayerBtn"
-        android:layout_marginTop="52dp"
-        android:onClick="twoPlayerBtnOnClick"
-        android:layout_below="@+id/onePlayerBtn"
-        android:layout_alignLeft="@+id/highScoresBtn"
-        android:layout_alignStart="@+id/highScoresBtn" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 Joueur"
+            android:id="@+id/onePlayerBtn"
+            android:layout_marginTop="50dp"
+            android:onClick="onePlayerBtnOnClick"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/twoPlayerBtn"
+            android:layout_alignStart="@+id/twoPlayerBtn"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="15dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Classement"
-        android:id="@+id/highScoresBtn"
-        android:layout_marginTop="53dp"
-        android:onClick="highScoresBtnOnClick"
-        android:layout_below="@+id/twoPlayerBtn"
-        android:layout_centerHorizontal="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quitter"
+            android:id="@+id/quitBtn"
+            android:onClick="quitBtnOnClick"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/highScoresBtn"
+            android:layout_alignLeft="@+id/highScoresBtn"
+            android:layout_alignStart="@+id/highScoresBtn"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="15dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quitter"
-        android:id="@+id/quitBtn"
-        android:onClick="quitBtnOnClick"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/highScoresBtn"
-        android:layout_alignLeft="@+id/highScoresBtn"
-        android:layout_alignStart="@+id/highScoresBtn" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Classement"
+            android:id="@+id/highScoresBtn"
+            android:layout_marginTop="60dp"
+            android:onClick="highScoresBtnOnClick"
+            android:layout_below="@+id/twoPlayerBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Joueurs"
+            android:id="@+id/twoPlayerBtn"
+            android:layout_marginTop="100dp"
+            android:onClick="twoPlayerBtnOnClick"
+            android:layout_below="@+id/onePlayerBtn"
+            android:layout_alignLeft="@+id/highScoresBtn"
+            android:layout_alignStart="@+id/highScoresBtn"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="SUPER MEMORY BROTHERS"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal|top"
+            android:autoText="false"
+            android:textColor="#ffffffff" />
+
+    </FrameLayout>
 </RelativeLayout>

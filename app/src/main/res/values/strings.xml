@@ -7,7 +7,6 @@
     <string name="title_activity_jeu">Jeu</string>
     <string name="title_activity_test">test</string>
     <string name="title_activity_ranking">Ranking</string>
-
     <string name="rank1Name">rank1Name</string>
     <string name="rank1Score">0</string>
     <string name="rank2Name">rank2Name</string>
@@ -18,5 +17,6 @@
     <string name="rank4Score">0</string>
     <string name="rank5Name">rank5Name</string>
     <string name="rank5Score">0</string>
+    <string name="title_activity_end_game_options">EndGameOptions</string>
 
 </resources>

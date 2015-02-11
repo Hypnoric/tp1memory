@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
+import java.util.LinkedList;
 
 public class Jeu extends ActionBarActivity {
 
@@ -35,6 +37,9 @@ public class Jeu extends ActionBarActivity {
 
     String player1Name = null;
     String player2Name = null;
+
+    LimitedQueue<Integer> memoireIds = new LimitedQueue<>(4);
+    LimitedQueue<View> memoireCartes = new LimitedQueue<>(4);
 
     Random rand = new Random();
     Integer[] ImagesIds = {
@@ -93,10 +98,39 @@ public class Jeu extends ActionBarActivity {
         initialiserBoutons();
     }
 
+    private void jeuAI(){
+        disableAllButtons();
+        int indexCarte1 = 255;
+        int indexCarte2 = 255;
+        comparaisonCartes:
+        for(int i = 0; i < memoireIds.size(); ++i ) {
+            for(int j = i+1; j < memoireIds.size(); ++j ) {
+                if(memoireIds.get(i) == memoireIds.get(j)) {
+                    indexCarte1 = i;
+                    indexCarte2 = j;
+                    break comparaisonCartes;
+                }
+            }
+        }
+        if(indexCarte1 < 255){
+            memoireIds.remove(indexCarte1);
+            memoireIds.remove(indexCarte2);
+            memoireCartes.get(indexCarte1).callOnClick();
+            memoireCartes.get(indexCarte2).callOnClick();
+            memoireCartes.remove(indexCarte1);
+            memoireCartes.remove(indexCarte2);
+        }
+        else{
+            int nouvelleCarte = rand.nextInt(24);
+            //TODO:creer des listes pour savoir quels cartes il reste
+        }
+    }
+
     private void gererPartie(Integer carte, View v){
         carteCourante = v;
         if(carteTournee != 255 && derniereCarte != carteCourante)
         {
+
             if(carte == carteTournee)
             {
                 if(tourJoueur1) {
@@ -179,6 +213,8 @@ public class Jeu extends ActionBarActivity {
 
         derniereCarte = null;
         carteCourante = null;
+        if(isOnePlayer && !tourJoueur1)
+            jeuAI();
     }
 
     private void retournerCartes(){
@@ -187,6 +223,8 @@ public class Jeu extends ActionBarActivity {
         carteTournee = 255;
         derniereCarte = null;
         carteCourante = null;
+        if(isOnePlayer && !tourJoueur1)
+            jeuAI();
     }
 
     private void click(View v, int x, int y){

@@ -46,7 +46,7 @@
             android:id="@+id/imageP1"
             android:layout_column="1"
             android:layout_row="0"
-            android:background="@drawable/p1"
+            android:background="@drawable/p1light"
             android:layout_rowSpan="1"
             android:layout_columnSpan="1" />
 

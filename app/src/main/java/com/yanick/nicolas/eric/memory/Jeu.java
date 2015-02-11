@@ -74,6 +74,7 @@ public class Jeu extends ActionBarActivity {
             for(int j = 0; j < cards[i].length; ++j) {
                 cards[i][j] = 255;
             }
+
         }
         for(int i = 0; i < ImagesIds.length; ++i) {
             placerCarte(i);
@@ -123,9 +124,16 @@ public class Jeu extends ActionBarActivity {
             {
                 tourJoueur1 = !tourJoueur1;
 
-                //TODO:changer image pour savoir le joueur actif
                 final ImageView imageP1 = (ImageView) findViewById(R.id.imageP1);
                 final ImageView imageP2 = (ImageView) findViewById(R.id.imageP2);
+                if(tourJoueur1) {
+                    imageP1.setBackgroundResource(R.drawable.p1light);
+                    imageP2.setBackgroundResource(R.drawable.p2);
+                }
+                else{
+                    imageP1.setBackgroundResource(R.drawable.p1);
+                    imageP2.setBackgroundResource(R.drawable.p2light);
+                }
 
                 disableAllButtons();
                 waitHandler.postDelayed(new Runnable() {
@@ -182,14 +190,14 @@ public class Jeu extends ActionBarActivity {
     }
 
     private void click(View v, int x, int y){
-        if(combinaisonTrouvee){
+        /*if(combinaisonTrouvee){
             combinaisonTrouvee = false;
             retirerCartes();
         }
         else if(cartesDifferentes){
             cartesDifferentes = false;
             retournerCartes();
-        }
+        }*/
         v.setBackground(getResources().getDrawable(cards[x][y]));
         gererPartie(cards[x][y], v);
     }

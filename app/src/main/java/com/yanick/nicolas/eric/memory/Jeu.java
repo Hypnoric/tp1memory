@@ -24,9 +24,12 @@ public class Jeu extends ActionBarActivity {
     boolean isOnePlayer;
     boolean partieTerminee;
     boolean tourJoueur1;
+    boolean combinaisonTrouvee;
+    boolean cartesDifferentes;
     Integer carteTournee;
     View carteCourante;
     View derniereCarte;
+    View tempCarte;
     int ptsP1;
     int ptsP2;
 
@@ -83,6 +86,8 @@ public class Jeu extends ActionBarActivity {
         tourJoueur1 = true;
         partieTerminee = false;
         derniereCarte = null;
+        cartesDifferentes = false;
+        combinaisonTrouvee = false;
 
         initialiserBoutons();
     }
@@ -112,6 +117,7 @@ public class Jeu extends ActionBarActivity {
                 }, 2000);
 
                 //retirerCartes(v);
+                combinaisonTrouvee = true;
             }
             else
             {
@@ -130,7 +136,9 @@ public class Jeu extends ActionBarActivity {
                 }, 2000);
 
                 //retournerCartes(v);
+                cartesDifferentes = true;
             }
+            tempCarte = derniereCarte;
         }
         else {
             carteTournee = carte;
@@ -174,6 +182,14 @@ public class Jeu extends ActionBarActivity {
     }
 
     private void click(View v, int x, int y){
+        if(combinaisonTrouvee){
+            combinaisonTrouvee = false;
+            retirerCartes();
+        }
+        else if(cartesDifferentes){
+            cartesDifferentes = false;
+            retournerCartes();
+        }
         v.setBackground(getResources().getDrawable(cards[x][y]));
         gererPartie(cards[x][y], v);
     }

@@ -34,6 +34,7 @@ public class Jeu extends Activity {
     View tempCarte;
     int ptsP1;
     int ptsP2;
+    int temp;
 
     String player1Name = null;
     String player2Name = null;
@@ -105,9 +106,9 @@ public class Jeu extends Activity {
     */
     private void jeuAI(){
         disableAllButtons();
-        int indexCarte1 = 255;
-        int indexCarte2 = 255;
-        comparaisonCartes:
+        //int indexCarte1 = 255;
+        //int indexCarte2 = 255;
+        //comparaisonCartes:
         for(int i = 0; i < memoireIds.size(); ++i ) {
             for(int j = i+1; j < memoireIds.size(); ++j ) {
                 if(memoireIds.get(i) == memoireIds.get(j)) {
@@ -124,21 +125,32 @@ public class Jeu extends Activity {
         }
 
         //If we get here, we havent found any pattern matching and needs to search
-                int nouvelleCarte = rand.nextInt(24);
+        int nouvelleCarte = rand.nextInt(24);
         while(memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE){
             nouvelleCarte = rand.nextInt(24);
         }
-        cartesView.get(nouvelleCarte).callOnClick();
-        // ****************** PROBLEM HERE, CHECK IF ID AND VIEW ARE DIFFERENT **************************** //
+
         if(memoireIds.contains(cards[nouvelleCarte])){
-            cartesView.get(memoireIds.indexOf(cards[nouvelleCarte])).callOnClick();
+            tempCarte = memoireCartes.get(memoireIds.indexOf(cards[nouvelleCarte]));
+            cartesView.get(nouvelleCarte).callOnClick();
+            waitHandler.postDelayed(new Runnable() {
+                public void run() {
+                    tempCarte.callOnClick();
+                }
+            }, 1000);
         }
         else {
+            cartesView.get(nouvelleCarte).callOnClick();
             int nouvelleCarte2 = rand.nextInt(24);
-            while (memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE || nouvelleCarte == nouvelleCarte2) {
-                nouvelleCarte = rand.nextInt(24);
+            while (memoireCartes.contains(cartesView.get(nouvelleCarte2)) || cartesView.get(nouvelleCarte2).getVisibility() == View.INVISIBLE || nouvelleCarte == nouvelleCarte2) {
+                nouvelleCarte2 = rand.nextInt(24);
             }
-            cartesView.get(nouvelleCarte2).callOnClick();
+            temp = nouvelleCarte2;
+            waitHandler.postDelayed(new Runnable() {
+                public void run() {
+                    cartesView.get(temp).callOnClick();
+                }
+            }, 1000);
         }
     }
 
@@ -205,7 +217,7 @@ public class Jeu extends Activity {
                 //retournerCartes(v);
                 cartesDifferentes = true;
             }
-            tempCarte = derniereCarte;
+            //tempCarte = derniereCarte;
         }
         else {
             if(!memoireCartes.contains((ImageView) v))
@@ -276,7 +288,7 @@ public class Jeu extends Activity {
             cartesDifferentes = false;
             retournerCartes();
         }*/
-        v.setBackground(getResources().getDrawable(cards[x]));
+        v.setBackground(getResources().getDrawable(cards[x].intValue()));
         gererPartie(cards[x], v);
     }
 
@@ -536,11 +548,12 @@ public class Jeu extends Activity {
     }
 
     private boolean carteRestante(){
+        boolean restantes = false;
         for(int i = 0; i < cartesView.size(); i++){
-            if(cartesView.get(i) != null)
-                return true;
+            if(cartesView.get(i).getVisibility() != View.INVISIBLE)
+                restantes = true;
         }
-        return false;
+        return restantes;
     }
 
     @Override

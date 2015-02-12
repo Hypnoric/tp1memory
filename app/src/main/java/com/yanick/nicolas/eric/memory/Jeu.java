@@ -39,7 +39,7 @@ public class Jeu extends ActionBarActivity {
     String player2Name = null;
 
     LimitedQueue<Integer> memoireIds = new LimitedQueue<>(4);
-    LimitedQueue<View> memoireCartes = new LimitedQueue<>(4);
+    LimitedQueue<ImageView> memoireCartes = new LimitedQueue<>(4);
 
     Random rand = new Random();
     Integer[] ImagesIds = {
@@ -57,7 +57,7 @@ public class Jeu extends ActionBarActivity {
             R.drawable.jiggs
     };
 
-    Integer[][] cards = new Integer[4][6];
+    Integer[] cards = new Integer[24];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +75,8 @@ public class Jeu extends ActionBarActivity {
             }
         }
 
-        for(int i = 0; i < cards.length; ++i){
-            for(int j = 0; j < cards[i].length; ++j) {
-                cards[i][j] = 255;
-            }
-
+        for(int i = 0; i < 24; ++i){
+            cards[i] = 255;
         }
         for(int i = 0; i < ImagesIds.length; ++i) {
             placerCarte(i);
@@ -98,6 +95,14 @@ public class Jeu extends ActionBarActivity {
         initialiserBoutons();
     }
 
+    /*
+    Fonction qui s'occupe de gerer le tour de jeu de l'AI.
+    Il se souvient des 4 derniere cartes qui ont ete retournees.
+    S'il y a 2 cartes pareilles en memoir il les retournes.
+    Sinon il tourne une carte aleatoirement parmis celles qu'il ne connais pas.
+    Il verifie ensuite s'il connais la position de la 2eme carte correspondante.
+    S'il ne la connais pas il tourne une deuxieme carte aleatoirement.
+    */
     private void jeuAI(){
         disableAllButtons();
         int indexCarte1 = 255;
@@ -112,25 +117,42 @@ public class Jeu extends ActionBarActivity {
                 }
             }
         }
-        if(indexCarte1 < 255){
+        if(indexCarte1 != 255){
             memoireIds.remove(indexCarte1);
-            memoireIds.remove(indexCarte2);
+            memoireIds.remove(indexCarte2 - 1);
             memoireCartes.get(indexCarte1).callOnClick();
             memoireCartes.get(indexCarte2).callOnClick();
             memoireCartes.remove(indexCarte1);
-            memoireCartes.remove(indexCarte2);
+            memoireCartes.remove(indexCarte2 - 1);
         }
         else{
             int nouvelleCarte = rand.nextInt(24);
-            //TODO:creer des listes pour savoir quels cartes il reste
+            while(memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE){
+                nouvelleCarte = rand.nextInt(24);
+            }
+            cartesView.get(nouvelleCarte).callOnClick();
+            if(memoireIds.contains(cards[nouvelleCarte])){
+                cartesView.get(memoireIds.indexOf(cards[nouvelleCarte])).callOnClick();
+            }
+            else {
+                int nouvelleCarte2 = rand.nextInt(24);
+                while (memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE || nouvelleCarte == nouvelleCarte2) {
+                    nouvelleCarte = rand.nextInt(24);
+                }
+                cartesView.get(nouvelleCarte2).callOnClick();
+            }
         }
     }
 
+    /*
+    Fonction qui gere la logique de la partie lorsqu'une carte est retournee.
+    S'occupe d'attribuer les points et retirer les cartes si 2 cartes pareilles sont choisies.
+    Retourne les cartes face cachees si les cartes sont differentes.
+     */
     private void gererPartie(Integer carte, View v){
         carteCourante = v;
         if(carteTournee != 255 && derniereCarte != carteCourante)
         {
-
             if(carte == carteTournee)
             {
                 if(tourJoueur1) {
@@ -156,6 +178,11 @@ public class Jeu extends ActionBarActivity {
             }
             else
             {
+                if(!memoireCartes.contains((ImageView) v))
+                {
+                    memoireIds.add(carte);
+                    memoireCartes.add((ImageView) v);
+                }
                 tourJoueur1 = !tourJoueur1;
 
                 final ImageView imageP1 = (ImageView) findViewById(R.id.imageP1);
@@ -188,6 +215,9 @@ public class Jeu extends ActionBarActivity {
         }
     }
 
+    /*
+    Enleve les 2 dernieres cartes retournees du jeu.
+     */
     private void retirerCartes(){
         derniereCarte.setEnabled(false);
         carteCourante.setEnabled(false);
@@ -195,8 +225,8 @@ public class Jeu extends ActionBarActivity {
         carteCourante.setVisibility(View.INVISIBLE);
         carteTournee = 255;
 
-        cartesView.set(cartesView.indexOf(carteCourante), null);
-        cartesView.set(cartesView.indexOf(derniereCarte), null);
+        //cartesView.set(cartesView.indexOf(carteCourante), null);
+        //cartesView.set(cartesView.indexOf(derniereCarte), null);
 
         if(!carteRestante()){
             // Fin de la partie. Retour au menu
@@ -217,6 +247,9 @@ public class Jeu extends ActionBarActivity {
             jeuAI();
     }
 
+    /*
+    Tourne les deux dernieres cartes choisie face cachees
+     */
     private void retournerCartes(){
         derniereCarte.setBackgroundResource(R.drawable.facedown);
         carteCourante.setBackgroundResource(R.drawable.facedown);
@@ -227,7 +260,10 @@ public class Jeu extends ActionBarActivity {
             jeuAI();
     }
 
-    private void click(View v, int x, int y){
+    /*
+    Tourne la carte cliquee et appel la fonction gererPartie pour la carte cliquee
+     */
+    private void click(View v, int x){
         /*if(combinaisonTrouvee){
             combinaisonTrouvee = false;
             retirerCartes();
@@ -236,16 +272,19 @@ public class Jeu extends ActionBarActivity {
             cartesDifferentes = false;
             retournerCartes();
         }*/
-        v.setBackground(getResources().getDrawable(cards[x][y]));
-        gererPartie(cards[x][y], v);
+        v.setBackground(getResources().getDrawable(cards[x]));
+        gererPartie(cards[x], v);
     }
 
+    /*
+    Initialise les boutons des cartes.
+     */
     private void initialiserBoutons(){
         final ImageButton carte1 = (ImageButton) findViewById(R.id.imageButton);
         carte1.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 0);
+                click(v, 0);
             }
         });
         cartesView.add(carte1);
@@ -254,7 +293,7 @@ public class Jeu extends ActionBarActivity {
         carte2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 1);
+                click(v, 1);
             }
         });
         cartesView.add(carte2);
@@ -263,7 +302,7 @@ public class Jeu extends ActionBarActivity {
         carte3.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 2);
+                click(v, 2);
             }
         });
         cartesView.add(carte3);
@@ -272,7 +311,7 @@ public class Jeu extends ActionBarActivity {
         carte4.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 3);
+                click(v, 3);
             }
         });
         cartesView.add(carte4);
@@ -281,7 +320,7 @@ public class Jeu extends ActionBarActivity {
         carte5.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 4);
+                click(v, 4);
             }
         });
         cartesView.add(carte5);
@@ -290,7 +329,7 @@ public class Jeu extends ActionBarActivity {
         carte6.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 0, 5);
+                click(v, 5);
             }
         });
         cartesView.add(carte6);
@@ -299,7 +338,7 @@ public class Jeu extends ActionBarActivity {
         carte7.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 0);
+                click(v, 6);
             }
         });
         cartesView.add(carte7);
@@ -308,7 +347,7 @@ public class Jeu extends ActionBarActivity {
         carte8.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 1);
+                click(v, 7);
             }
         });
         cartesView.add(carte8);
@@ -317,7 +356,7 @@ public class Jeu extends ActionBarActivity {
         carte9.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 2);
+                click(v, 8);
             }
         });
         cartesView.add(carte9);
@@ -326,7 +365,7 @@ public class Jeu extends ActionBarActivity {
         carte10.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 3);
+                click(v, 9);
             }
         });
         cartesView.add(carte10);
@@ -335,7 +374,7 @@ public class Jeu extends ActionBarActivity {
         carte11.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 4);
+                click(v, 10);
             }
         });
         cartesView.add(carte11);
@@ -344,7 +383,7 @@ public class Jeu extends ActionBarActivity {
         carte12.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 1, 5);
+                click(v, 11);
             }
         });
         cartesView.add(carte12);
@@ -353,7 +392,7 @@ public class Jeu extends ActionBarActivity {
         carte13.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 0);
+                click(v, 12);
             }
         });
         cartesView.add(carte13);
@@ -362,7 +401,7 @@ public class Jeu extends ActionBarActivity {
         carte14.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 1);
+                click(v, 13);
             }
         });
         cartesView.add(carte14);
@@ -371,7 +410,7 @@ public class Jeu extends ActionBarActivity {
         carte15.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 2);
+                click(v, 14);
             }
         });
         cartesView.add(carte15);
@@ -380,7 +419,7 @@ public class Jeu extends ActionBarActivity {
         carte16.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 3);
+                click(v, 15);
             }
         });
         cartesView.add(carte16);
@@ -389,7 +428,7 @@ public class Jeu extends ActionBarActivity {
         carte17.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 4);
+                click(v, 16);
             }
         });
         cartesView.add(carte17);
@@ -398,7 +437,7 @@ public class Jeu extends ActionBarActivity {
         carte18.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 2, 5);
+                click(v, 17);
             }
         });
         cartesView.add(carte18);
@@ -407,7 +446,7 @@ public class Jeu extends ActionBarActivity {
         carte19.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 0);
+                click(v, 18);
             }
         });
         cartesView.add(carte19);
@@ -416,7 +455,7 @@ public class Jeu extends ActionBarActivity {
         carte20.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 1);
+                click(v, 19);
             }
         });
         cartesView.add(carte20);
@@ -425,7 +464,7 @@ public class Jeu extends ActionBarActivity {
         carte21.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 2);
+                click(v, 20);
             }
         });
         cartesView.add(carte21);
@@ -434,7 +473,7 @@ public class Jeu extends ActionBarActivity {
         carte22.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 3);
+                click(v, 21);
             }
         });
         cartesView.add(carte22);
@@ -443,7 +482,7 @@ public class Jeu extends ActionBarActivity {
         carte23.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 4);
+                click(v, 22);
             }
         });
         cartesView.add(carte23);
@@ -452,25 +491,29 @@ public class Jeu extends ActionBarActivity {
         carte24.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                click(v, 3, 5);
+                click(v, 23);
             }
         });
         cartesView.add(carte24);
     }
 
+    /*
+    Attribue une position dans la grille pour l'id de la carte recue en parametre.
+     */
     private void placerCarte(int i){
         boolean espaceLibre = false;
         while(!espaceLibre){
             int position = rand.nextInt(24);
-            int x = position % 4;
-            int y = position / 4;
-            if(cards[x][y] == 255){
+            if(cards[position] == 255){
                 espaceLibre = true;
-                cards[x][y] = ImagesIds[i];
+                cards[position] = ImagesIds[i];
             }
         }
     }
 
+    /*
+    Mets l'attribut de tous les boutons isEnabled a true
+     */
     private void enableAllButtons(){
         for(int i = 0; i < cartesView.size(); i++){
             if(cartesView.get(i) != null)
@@ -478,6 +521,9 @@ public class Jeu extends ActionBarActivity {
         }
     }
 
+    /*
+    Mets l'attribut de tous les boutons isEnabled a false
+     */
     private void disableAllButtons(){
         for(int i = 0; i < cartesView.size(); i++){
             if(cartesView.get(i) != null)

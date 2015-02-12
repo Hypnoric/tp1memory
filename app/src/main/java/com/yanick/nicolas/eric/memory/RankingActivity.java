@@ -1,13 +1,13 @@
 package com.yanick.nicolas.eric.memory;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class RankingActivity extends ActionBarActivity {
+public class RankingActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,9 +1,9 @@
 package com.yanick.nicolas.eric.memory;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.LinkedList;
 
-public class Jeu extends ActionBarActivity {
+public class Jeu extends Activity {
 
     private Handler waitHandler = new Handler();
     private ArrayList<ImageView> cartesView = new ArrayList<ImageView>();
@@ -111,36 +111,34 @@ public class Jeu extends ActionBarActivity {
         for(int i = 0; i < memoireIds.size(); ++i ) {
             for(int j = i+1; j < memoireIds.size(); ++j ) {
                 if(memoireIds.get(i) == memoireIds.get(j)) {
-                    indexCarte1 = i;
-                    indexCarte2 = j;
-                    break comparaisonCartes;
+                    memoireIds.remove(i);
+                    memoireIds.remove(j - 1);
+                    memoireCartes.get(i).callOnClick();
+                    memoireCartes.get(j).callOnClick();
+                    memoireCartes.remove(i);
+                    memoireCartes.remove(j - 1);
+                    // if we get here, we found cards and are done
+                    return;
                 }
             }
         }
-        if(indexCarte1 != 255){
-            memoireIds.remove(indexCarte1);
-            memoireIds.remove(indexCarte2 - 1);
-            memoireCartes.get(indexCarte1).callOnClick();
-            memoireCartes.get(indexCarte2).callOnClick();
-            memoireCartes.remove(indexCarte1);
-            memoireCartes.remove(indexCarte2 - 1);
+
+        //If we get here, we havent found any pattern matching and needs to search
+                int nouvelleCarte = rand.nextInt(24);
+        while(memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE){
+            nouvelleCarte = rand.nextInt(24);
         }
-        else{
-            int nouvelleCarte = rand.nextInt(24);
-            while(memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE){
+        cartesView.get(nouvelleCarte).callOnClick();
+        // ****************** PROBLEM HERE, CHECK IF ID AND VIEW ARE DIFFERENT **************************** //
+        if(memoireIds.contains(cards[nouvelleCarte])){
+            cartesView.get(memoireIds.indexOf(cards[nouvelleCarte])).callOnClick();
+        }
+        else {
+            int nouvelleCarte2 = rand.nextInt(24);
+            while (memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE || nouvelleCarte == nouvelleCarte2) {
                 nouvelleCarte = rand.nextInt(24);
             }
-            cartesView.get(nouvelleCarte).callOnClick();
-            if(memoireIds.contains(cards[nouvelleCarte])){
-                cartesView.get(memoireIds.indexOf(cards[nouvelleCarte])).callOnClick();
-            }
-            else {
-                int nouvelleCarte2 = rand.nextInt(24);
-                while (memoireCartes.contains(cartesView.get(nouvelleCarte)) || cartesView.get(nouvelleCarte).getVisibility() == View.INVISIBLE || nouvelleCarte == nouvelleCarte2) {
-                    nouvelleCarte = rand.nextInt(24);
-                }
-                cartesView.get(nouvelleCarte2).callOnClick();
-            }
+            cartesView.get(nouvelleCarte2).callOnClick();
         }
     }
 
@@ -210,6 +208,12 @@ public class Jeu extends ActionBarActivity {
             tempCarte = derniereCarte;
         }
         else {
+            if(!memoireCartes.contains((ImageView) v))
+            {
+                memoireIds.add(carte);
+                memoireCartes.add((ImageView) v);
+            }
+
             carteTournee = carte;
             derniereCarte = carteCourante;
         }

@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_name_request);
-        dialog.setTitle("Player name");
+        dialog.setTitle("Nom du Joueur");
 
         // set the custom dialog components - text, image and button
         EditText text = (EditText) dialog.findViewById(R.id.playername);
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_name_request);
-        dialog.setTitle("Player name");
+        dialog.setTitle("Nom du Joueur 1");
 
         // set the custom dialog components - text, image and button
         EditText text = (EditText) dialog.findViewById(R.id.playername);
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
                 EditText text = (EditText) dialog.findViewById(R.id.playername);
                 lastPlayer1Name = text.getText().toString();
 
-                dialog.setTitle("Player 2 name");
+                dialog.setTitle("Nom du Joueur 2");
                 text.setText(lastPlayer2Name);
 
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);

@@ -1,6 +1,8 @@
 package com.yanick.nicolas.eric.memory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,8 +73,13 @@ public class Jeu extends Activity {
         } else {
             isOnePlayer= extras.getBoolean("isOnePlayer");
             player1Name = extras.getString("player1Name");
+            final TextView txtP1 = (TextView) findViewById(R.id.txtPlayer1);
+            txtP1.setText(player1Name);
+
             if(!isOnePlayer){
                 player2Name = extras.getString("player2Name");
+                final TextView txtP2 = (TextView) findViewById(R.id.txtPlayer2);
+                txtP2.setText(player2Name);
             }
         }
 
@@ -94,6 +101,32 @@ public class Jeu extends Activity {
         combinaisonTrouvee = false;
 
         initialiserBoutons();
+    }
+
+    public void onBackPressed() {
+        AlertDialog diaBox = AskOption();
+        diaBox.show();
+    }
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                .setTitle("Quitter")
+                .setMessage("Voulez vous quitter la partie?")
+
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
     }
 
     /*

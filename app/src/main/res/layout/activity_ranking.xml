@@ -15,7 +15,7 @@
         android:textColor="#ffffffff" />
 
     <TextView android:id="@+id/rank1player"
-        android:text="1. -"
+        android:text="1.\t-"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="92dp"
@@ -23,7 +23,7 @@
         android:textColor="#ffffffff" />
 
     <TextView android:id="@+id/rank2player"
-        android:text="2. -"
+        android:text="2.\t-"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -32,7 +32,7 @@
         android:textColor="#ffffffff" />
 
     <TextView android:id="@+id/rank3player"
-        android:text="3. -"
+        android:text="3.\t-"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -41,7 +41,7 @@
         android:textColor="#ffffffff" />
 
     <TextView android:id="@+id/rank4player"
-        android:text="4. -"
+        android:text="4.\t-"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -50,7 +50,7 @@
         android:textColor="#ffffffff" />
 
     <TextView android:id="@+id/rank5player"
-        android:text="5. -"
+        android:text="5.\t-"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

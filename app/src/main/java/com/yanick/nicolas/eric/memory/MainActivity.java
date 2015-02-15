@@ -22,6 +22,10 @@ public class MainActivity extends Activity {
     static final int DUAL_GAME_REQUEST = 1;
     static final int HIGH_SCORE_REQUEST = 2;
 
+    static final int RESULT_REMATCH = 3;
+    static final int RESULT_FINISHED = 4;
+    static final int RESULT_QUIT = 5;
+
     public String lastPlayer1Name = "Bobby";
     public String lastPlayer2Name = "Johny";
 
@@ -171,15 +175,32 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, intent);
         switch(requestCode) {
             case SINGLE_GAME_REQUEST:
-                if(resultCode == RESULT_OK){
+                if(resultCode == RESULT_REMATCH){
+                    String nomJoueur = intent.getStringExtra("nomJoueur1");
+                    int score = intent.getIntExtra("scoreJoueur1",0);
+                    Player joueur = new Player(nomJoueur, score);
+                    rankPlayer(joueur);
+
+                    startSingle(lastPlayer1Name);
+                }
+                else if(resultCode == RESULT_FINISHED){
                     String nomJoueur = intent.getStringExtra("nomJoueur1");
                     int score = intent.getIntExtra("scoreJoueur1",0);
                     Player joueur = new Player(nomJoueur, score);
                     rankPlayer(joueur);
                 }
+                else if(resultCode == RESULT_QUIT){
+                    String nomJoueur = intent.getStringExtra("nomJoueur1");
+                    int score = intent.getIntExtra("scoreJoueur1",0);
+                    Player joueur = new Player(nomJoueur, score);
+                    rankPlayer(joueur);
+
+                    finish();
+                    System.exit(0);
+                }
                 break;
             case DUAL_GAME_REQUEST:
-                if(resultCode == RESULT_OK){
+                if(resultCode == RESULT_REMATCH){
                     String nomJoueur1 = intent.getStringExtra("nomJoueur1");
                     int score1 = intent.getIntExtra("scoreJoueur1",0);
                     Player joueur1 = new Player(nomJoueur1, score1);
@@ -188,6 +209,31 @@ public class MainActivity extends Activity {
                     int score2 = intent.getIntExtra("scoreJoueur2",0);
                     Player joueur2 = new Player(nomJoueur2, score2);
                     rankPlayer(joueur2);
+
+                    startDual(lastPlayer1Name, lastPlayer2Name);
+                }
+                else if(resultCode == RESULT_FINISHED){
+                    String nomJoueur1 = intent.getStringExtra("nomJoueur1");
+                    int score1 = intent.getIntExtra("scoreJoueur1",0);
+                    Player joueur1 = new Player(nomJoueur1, score1);
+                    rankPlayer(joueur1);
+                    String nomJoueur2 = intent.getStringExtra("nomJoueur2");
+                    int score2 = intent.getIntExtra("scoreJoueur2",0);
+                    Player joueur2 = new Player(nomJoueur2, score2);
+                    rankPlayer(joueur2);
+                }
+                else if(resultCode == RESULT_QUIT){
+                    String nomJoueur1 = intent.getStringExtra("nomJoueur1");
+                    int score1 = intent.getIntExtra("scoreJoueur1",0);
+                    Player joueur1 = new Player(nomJoueur1, score1);
+                    rankPlayer(joueur1);
+                    String nomJoueur2 = intent.getStringExtra("nomJoueur2");
+                    int score2 = intent.getIntExtra("scoreJoueur2",0);
+                    Player joueur2 = new Player(nomJoueur2, score2);
+                    rankPlayer(joueur2);
+
+                    finish();
+                    System.exit(0);
                 }
                 break;
         }

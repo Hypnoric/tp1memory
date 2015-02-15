@@ -2,6 +2,7 @@ package com.yanick.nicolas.eric.memory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -278,16 +281,8 @@ public class Jeu extends Activity {
         //cartesView.set(cartesView.indexOf(derniereCarte), null);
 
         if(!carteRestante()){
-            // Fin de la partie. Retour au menu
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("nomJoueur1",player1Name);
-            returnIntent.putExtra("scoreJoueur1",ptsP1);
-            if(!isOnePlayer){
-                returnIntent.putExtra("nomJoueur2",player2Name);
-                returnIntent.putExtra("scoreJoueur2",ptsP2);
-            }
-            setResult(RESULT_OK,returnIntent);
-            finish();
+            showEndGameDialog();
+            return;
         }
 
         derniereCarte = null;
@@ -307,6 +302,59 @@ public class Jeu extends Activity {
         carteCourante = null;
         if(isOnePlayer && !tourJoueur1)
             jeuAI();
+    }
+
+    private void showEndGameDialog(){
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_end_game);
+        dialog.setTitle("Fin de la partie");
+        dialog.setCanceledOnTouchOutside(false);
+
+        Button rematchButton = (Button) dialog.findViewById(R.id.dialogButtonRematch);
+        // if button is clicked, close the custom dialog
+        rematchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                BackToMenu(MainActivity.RESULT_REMATCH);
+            }
+        });
+
+        Button menuButton = (Button) dialog.findViewById(R.id.dialogButtonMenu);
+        // if button is clicked, close the custom dialog
+        rematchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                BackToMenu(MainActivity.RESULT_FINISHED);
+            }
+        });
+
+        Button quitButton = (Button) dialog.findViewById(R.id.dialogButtonQuit);
+        // if button is clicked, close the custom dialog
+        rematchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                BackToMenu(MainActivity.RESULT_QUIT);
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void BackToMenu(int activityResult){
+        // Retour au menu
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("nomJoueur1",player1Name);
+        returnIntent.putExtra("scoreJoueur1",ptsP1);
+        if(!isOnePlayer){
+            returnIntent.putExtra("nomJoueur2",player2Name);
+            returnIntent.putExtra("scoreJoueur2",ptsP2);
+        }
+        setResult(activityResult,returnIntent);
+        finish();
     }
 
     /*

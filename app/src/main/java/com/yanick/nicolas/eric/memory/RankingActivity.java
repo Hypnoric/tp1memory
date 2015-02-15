@@ -16,16 +16,38 @@ public class RankingActivity extends Activity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
+            String tempName;
+            int tempScore;
+            boolean tempValid = false;
+            tempName = extras.getString("rank1Name");
+            tempScore = extras.getInt("rank1Score");
+            tempValid = (tempName != null && !tempName.isEmpty() && !tempName.equals("-")) && tempScore >= 0;
             TextView rank1 = (TextView) findViewById(R.id.rank1player);
-            rank1.setText(extras.getString("rank1Name"));
+            rank1.setText("1.    "+(tempValid?(tempName+"    "+tempScore):"-"));
+
+            tempName = extras.getString("rank2Name");
+            tempScore = extras.getInt("rank2Score");
+            tempValid = (tempName != null && !tempName.isEmpty()) && tempScore >= 0;
             TextView rank2 = (TextView) findViewById(R.id.rank2player);
-            rank2.setText(extras.getString("rank2Name"));
+            rank2.setText("2.    "+(tempValid?(tempName+"    "+tempScore):"-"));
+
+            tempName = extras.getString("rank3Name");
+            tempScore = extras.getInt("rank3Score");
+            tempValid = (tempName != null && !tempName.isEmpty()) && tempScore >= 0;
             TextView rank3 = (TextView) findViewById(R.id.rank3player);
-            rank3.setText(extras.getString("rank3Name"));
+            rank3.setText("3.    "+(tempValid?(tempName+"    "+tempScore):"-"));
+
+            tempName = extras.getString("rank4Name");
+            tempScore = extras.getInt("rank4Score");
+            tempValid = (tempName != null && !tempName.isEmpty()) && tempScore >= 0;
             TextView rank4 = (TextView) findViewById(R.id.rank4player);
-            rank4.setText(extras.getString("rank4Name"));
+            rank4.setText("4.    "+(tempValid?(tempName+"    "+tempScore):"-"));
+
+            tempName = extras.getString("rank5Name");
+            tempScore = extras.getInt("rank5Score");
+            tempValid = (tempName != null && !tempName.isEmpty()) && tempScore >= 0;
             TextView rank5 = (TextView) findViewById(R.id.rank5player);
-            rank5.setText(extras.getString("rank5Name"));
+            rank5.setText("5.    "+(tempValid?(tempName+"    "+tempScore):"-"));
         }
     }
 

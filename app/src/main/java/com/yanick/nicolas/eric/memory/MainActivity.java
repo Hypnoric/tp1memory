@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -40,19 +38,19 @@ public class MainActivity extends Activity {
         prefs = getPreferences(Context.MODE_PRIVATE);
         String rank1 = prefs.getString("rank1Name","-");
         int score1 = prefs.getInt("rank1Score", 0);
-        ranking[0] = new Player(rank1);
+        ranking[0] = new Player(rank1,score1);
         String rank2 = prefs.getString("rank2Name","-");
         int score2 = prefs.getInt("rank2Score", 0);
-        ranking[1] = new Player(rank2);
+        ranking[1] = new Player(rank2,score2);
         String rank3 = prefs.getString("rank3Name","-");
         int score3 = prefs.getInt("rank3Score", 0);
-        ranking[2] = new Player(rank3);
+        ranking[2] = new Player(rank3,score3);
         String rank4 = prefs.getString("rank4Name","-");
         int score4 = prefs.getInt("rank4Score", 0);
-        ranking[3] = new Player(rank4);
+        ranking[3] = new Player(rank4,score4);
         String rank5 = prefs.getString("rank5Name","-");
         int score5 = prefs.getInt("rank5Score", 0);
-        ranking[4] = new Player(rank5);
+        ranking[4] = new Player(rank5,score5);
     }
 
     @Override
@@ -195,8 +193,6 @@ public class MainActivity extends Activity {
                     Player joueur = new Player(nomJoueur, score);
                     rankPlayer(joueur);
 
-                    finish();
-                    System.exit(0);
                 }
                 break;
             case DUAL_GAME_REQUEST:
@@ -232,8 +228,6 @@ public class MainActivity extends Activity {
                     Player joueur2 = new Player(nomJoueur2, score2);
                     rankPlayer(joueur2);
 
-                    finish();
-                    System.exit(0);
                 }
                 break;
         }

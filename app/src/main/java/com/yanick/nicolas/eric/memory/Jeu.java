@@ -11,17 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.LinkedList;
 
 public class Jeu extends Activity {
 
@@ -219,7 +214,6 @@ public class Jeu extends Activity {
                     }
                 }, 2000);
 
-                //retirerCartes(v);
                 combinaisonTrouvee = true;
             }
             else
@@ -323,7 +317,7 @@ public class Jeu extends Activity {
 
         Button menuButton = (Button) dialog.findViewById(R.id.dialogButtonMenu);
         // if button is clicked, close the custom dialog
-        rematchButton.setOnClickListener(new View.OnClickListener() {
+        menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -333,7 +327,7 @@ public class Jeu extends Activity {
 
         Button quitButton = (Button) dialog.findViewById(R.id.dialogButtonQuit);
         // if button is clicked, close the custom dialog
-        rematchButton.setOnClickListener(new View.OnClickListener() {
+        quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -354,7 +348,21 @@ public class Jeu extends Activity {
             returnIntent.putExtra("scoreJoueur2",ptsP2);
         }
         setResult(activityResult,returnIntent);
+
+        if(activityResult == MainActivity.RESULT_QUIT)
+        {
+            finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            //int pid = android.os.Process.myPid();  // if we want to kill the app
+            //android.os.Process.killProcess(pid);
+        }
+
         finish();
+
     }
 
     /*

@@ -127,6 +127,17 @@ public class Jeu extends Activity {
 
     }
 
+    private int calculerPtsAI()
+    {
+        int cpt = 0;
+        for(int i = 0; i < cartesView.size(); ++i){
+            if(cartesView.get(i).getVisibility() == View.INVISIBLE)
+                ++cpt;
+        }
+        cpt = cpt / 2;
+        return cpt - ptsP1;
+    }
+
     /*
     Fonction qui s'occupe de gerer le tour de jeu de l'AI.
     Il se souvient des 4 derniere cartes qui ont ete retournees.
@@ -183,6 +194,8 @@ public class Jeu extends Activity {
                 }
             }, 1000);
         }
+        final TextView txtScore2 = (TextView) findViewById(R.id.scoreP2);
+        txtScore2.setText(String.valueOf(calculerPtsAI()));
     }
 
     /*
@@ -204,7 +217,10 @@ public class Jeu extends Activity {
                 else {
                     ++ptsP2;
                     final TextView txtScore2 = (TextView) findViewById(R.id.scoreP2);
-                    txtScore2.setText(String.valueOf(ptsP2));
+                    if(!isOnePlayer)
+                        txtScore2.setText(String.valueOf(ptsP2));
+                    else
+                        txtScore2.setText(String.valueOf(calculerPtsAI()));
                 }
                 disableAllButtons();
                 waitHandler.postDelayed(new Runnable() {
